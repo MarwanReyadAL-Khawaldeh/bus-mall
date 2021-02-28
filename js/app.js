@@ -25,7 +25,7 @@ let busMall = [
 ];
 function shop(name) {
     this.name = name;
-    this.image = `../img/${name}`;
+    this.image = `./img/${name}`;
     this.clickCounter = 0;
     this.shown = 0;
     shop.all.push(this);
