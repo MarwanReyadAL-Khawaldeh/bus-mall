@@ -53,7 +53,7 @@ let ulElement = document.getElementById('sort-data');
 let leftShopIndex = 0;
 let middleShopIndex = 0;
 let rightShopIndex = 0;
-const counterOfClick = 23;
+const counterOfClick = 25;
 let backIndex = [];
 
 
