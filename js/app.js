@@ -24,19 +24,32 @@ let busMall = [
 
 ];
 function shop(name) {
-    this.name = name;
+    this.name = splitName(name);
     this.image = `./img/${name}`;
     this.clickCounter = 0;
     this.shown = 0;
     shop.all.push(this);
+    localStorage.setItem('Shop', JSON.stringify(shop.all));
 }
+
+function splitName(name){
+    return name.split('.').slice(0,-1).join('.');
+}
+
 shop.all = [];
 shop.counter = 0;
+if (JSON.parse(localStorage.getItem('Shop'))) {
+    shop.all = JSON.parse(localStorage.getItem('Shop'));
 
-for (let i = 0; i < busMall.length; i++) {
-    new shop(busMall[i]);
+} else {
+    for (let i = 0; i < busMall.length; i++) {
+        new shop(busMall[i]);
+
+    }
 
 }
+
+
 
 console.log(shop.all);
 
@@ -66,10 +79,10 @@ function renderShop() {
     buttonElement.style.display = 'none';
     ulElement.style.display = 'none';
 
-    let leftIndex ;
-    do{
+    let leftIndex;
+    do {
         leftIndex = randomNumber(0, shop.all.length - 1);
-    }while(backIndex.indexOf(leftIndex) !== -1);
+    } while (backIndex.indexOf(leftIndex) !== -1);
     leftImage.src = shop.all[leftIndex].image;
     leftImage.alt = shop.all[leftIndex].name;
     leftShopIndex = leftIndex;
@@ -90,13 +103,15 @@ function renderShop() {
     rightImage.src = shop.all[rightIndex].image;
     rightImage.alt = shop.all[rightIndex].name;
     rightShopIndex = rightIndex;
-    backIndex[0]=leftIndex;
-    backIndex[1]=middleIndex;
-    backIndex[2]=rightIndex;
+    backIndex[0] = leftIndex;
+    backIndex[1] = middleIndex;
+    backIndex[2] = rightIndex;
     shop.all[leftShopIndex].shown++;
     shop.all[middleShopIndex].shown++;
     shop.all[rightShopIndex].shown++;
 }
+
+
 
 
 function handelClick(event) {
@@ -126,13 +141,18 @@ function handelClick(event) {
     }
     else {
         buttonElement.style.display = 'block';
+        localStorage.setItem('Shop', JSON.stringify(shop.all));
+
+
     }
 
 }
 
+
 function showData(event) {
     ulElement.style.display = 'block';
     for (let i = 0; i < shop.all.length; i++) {
+        localStorage.setItem('Shop', JSON.stringify(shop.all));
         const liElement = document.createElement('li');
         ulElement.appendChild(liElement);
         liElement.textContent = `${shop.all[i].name} had ${shop.all[i].clickCounter} votes, and was seen ${shop.all[i].shown} times.`;
@@ -144,8 +164,19 @@ buttonElement.addEventListener('click', showData);
 buttonElement.addEventListener('click', renderChart);
 imageSection.addEventListener('click', handelClick);
 
-renderShop();
 
+function getData() {
+    const data = localStorage.getItem('Shop');
+
+    if (data) {
+        const objData = JSON.parse(data);
+        shop.all = objData;
+        renderShop();
+    }
+}
+
+getData();
+renderShop();
 function renderChart() {
 
     let nameArray = [];
@@ -187,6 +218,8 @@ function renderChart() {
     });
 
 }
+
+
 
 
 
